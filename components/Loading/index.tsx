@@ -24,7 +24,7 @@ export const Loading = ({
   return (
     <div
       className={classNames(
-        "relative h-[44px] w-[calc(100vw-24px)] overflow-hidden rounded-2xl border-2 border-white/80 bg-white/40 shadow-lg shadow-pink-300/50 transition-all duration-300 md:w-[440px]",
+        "relative h-[44px] w-[calc(100vw-48px)] max-w-[440px] overflow-hidden rounded-2xl border-2 border-white/80 bg-white/40 shadow-lg shadow-pink-300/50 transition-all duration-300 md:w-[440px]",
         show && "translate-y-[-210px] md:translate-y-[-300px]"
       )}
     >
@@ -38,7 +38,7 @@ export const Loading = ({
       </div>
       <div className="block md:hidden h-full">
         <div
-          style={{ width: `calc((100vw - 24px)*${time}/100)` }}
+          style={{ width: `calc((100vw - 48px)*${time}/100)` }}
           className="flex h-full items-center justify-end rounded-2xl bg-gradient-to-r from-pink-200 via-rose-200 to-fuchsia-200 pr-2"
         >
           💞
@@ -47,11 +47,11 @@ export const Loading = ({
 
       <div className="absolute inset-0 flex items-center justify-center text-xl">
         {time < 100 ? (
-          <p className="text-lg font-semibold text-rose-500 drop-shadow">
+          <p className="px-2 text-center text-sm font-semibold text-rose-500 drop-shadow sm:text-lg">
             Đang kết nối ...
           </p>
         ) : (
-          <p className="text-lg font-semibold text-rose-600 drop-shadow">
+          <p className="px-2 text-center text-sm font-semibold text-rose-600 drop-shadow sm:text-lg">
             Đã chạm đến trái tim :))
           </p>
         )}

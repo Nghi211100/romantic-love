@@ -61,7 +61,7 @@ const Modal = React.forwardRef<HTMLButtonElement, IModalV2Props>(
         <Dialog as="div" className="fixed z-50 inset-0" onClose={() => {}}>
           <div
             className={classNames(
-              "flex justify-center items-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+              "flex min-h-screen items-center justify-center px-2 py-3 text-center sm:block sm:p-0"
             )}
           >
             <Transition.Child
@@ -92,12 +92,12 @@ const Modal = React.forwardRef<HTMLButtonElement, IModalV2Props>(
             >
               <div className={modalStylesWidth + " " + className}>
                 {showCloseBtn && (
-                  <div className="sm:block absolute top-1 right-2 pt-2 pr-2 z-50">
+                  <div className="absolute right-2 top-1 z-50 pr-1 pt-1 sm:block sm:pr-2 sm:pt-2">
                     <button
                       ref={ref}
                       type="button"
                       onClick={() => onCancel(false)}
-                      className="icon-close flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border border-white/70 bg-white/70 pb-1 font-sans text-lg text-rose-500 shadow-md transition-colors hover:bg-rose-400 hover:text-white"
+                      className="icon-close flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-white/70 bg-white/70 pb-1 font-sans text-lg text-rose-500 shadow-md transition-colors hover:bg-rose-400 hover:text-white sm:h-7 sm:w-7"
                     >
                       x
                     </button>

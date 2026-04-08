@@ -43,12 +43,12 @@ export const ModalCenter = ({
 
   return (
     <Modal show={show} onCancel={() => setShow(false)}>
-      <div className="h-[580px] w-screen rounded-2xl bg-gradient-to-br from-rose-100 to-pink-100 p-4 text-rose-600 shadow-2xl md:h-[480px] md:w-[700px]">
+      <div className="h-[82vh] w-[calc(100vw-16px)] rounded-2xl bg-gradient-to-br from-rose-100 to-pink-100 p-3 text-rose-600 shadow-2xl md:h-[480px] md:w-[700px] md:p-4">
         <div className="h-full rounded-xl border border-dashed border-rose-200">
           <div className="w-full h-full rotate-[-10deg] rounded-lg bg-white -z-10 absolute inset-0"></div>
-          <div className="flex w-full h-full">
-            <div className="-ml-3 md:-ml-10 w-1/2 relative h-full">
-              <div className="absolute inset-0 md:top-10 flex flex-col items-center justify-evenly h-full w-full">
+          <div className="flex h-full w-full flex-col md:flex-row">
+            <div className="relative h-[32%] w-full md:-ml-10 md:h-full md:w-1/2">
+              <div className="absolute inset-0 flex h-full w-full flex-row items-center justify-evenly md:top-10 md:flex-col">
                 <div className="block md:hidden">
                   <Image
                     src={"/images/avatar.jpg"}
@@ -65,12 +65,16 @@ export const ModalCenter = ({
                   height={600}
                   alt="heart"
                   loading="eager"
+                  className="h-[130px] w-[130px] object-contain md:h-auto md:w-auto"
                 />
               </div>
             </div>
-            <div className="w-1/2">
-              <div className="pt-4 pr-2">
-                <span className="text-base leading-relaxed md:text-xl" id={"content"}>
+            <div className="h-[58%] w-full md:h-full md:w-1/2">
+              <div className="h-full overflow-y-auto pr-1 pt-2 md:pt-4 md:pr-2">
+                <span
+                  className="text-base leading-relaxed md:text-xl"
+                  id={"content"}
+                >
                   {text}|
                 </span>
               </div>
