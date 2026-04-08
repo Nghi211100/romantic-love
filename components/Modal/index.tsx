@@ -10,15 +10,14 @@ interface IModalV2Props {
   show?: boolean;
   title?: string;
   setShow?: () => null;
-  children?: React.ReactElement;
-  onCancel?: () => void;
+  children?: React.ReactNode;
+  onCancel?: (visible: boolean) => void;
   isTransactionModal?: boolean;
-  ref?: React.ForwardedRef<unknown>;
   showCloseBtn?: boolean;
   className?: string;
 }
 
-const Modal: React.FC<IModalV2Props> = React.forwardRef(
+const Modal = React.forwardRef<HTMLButtonElement, IModalV2Props>(
   (
     {
       title = "",
@@ -95,7 +94,6 @@ const Modal: React.FC<IModalV2Props> = React.forwardRef(
                 {showCloseBtn && (
                   <div className="sm:block absolute top-1 right-2 pt-2 pr-2 z-50">
                     <button
-                      // @ts-ignore
                       ref={ref}
                       type="button"
                       onClick={() => onCancel(false)}
