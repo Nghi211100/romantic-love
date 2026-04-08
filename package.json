@@ -1,5 +1,5 @@
 {
-  "name": "be-trinh",
+  "name": "romantic",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start -p 8080",
     "lint": "next lint"
+  },
+  "engines": {
+    "node": "24.x"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.17",
