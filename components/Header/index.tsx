@@ -3,9 +3,9 @@ import React from "react";
 
 export const Header = () => {
   return (
-    <div className="text-[40px] md:text-[60px] font-bold text-white pt-5 md:pt-8 text-center">
-      <p className="drop-shadow-xl [text-shadow:_2px_3px_5px_rgb(239_99_99)] leading-tight">
-       {TITLE}
+    <div className="pt-2 text-center md:pt-4">
+      <p className="bg-gradient-to-r from-rose-100 via-pink-100 to-violet-100 bg-clip-text text-[40px] font-extrabold leading-tight text-transparent drop-shadow-2xl [text-shadow:_0_6px_18px_rgba(232,121,249,0.6)] md:text-[64px]">
+        {TITLE} <span className="text-white">❤️</span>
       </p>
     </div>
   );

@@ -55,7 +55,7 @@ const Modal: React.FC<IModalV2Props> = React.forwardRef(
       return () => {
         document.removeEventListener("keydown", handleKeyPress);
       };
-    }, []);
+    }, [onCancel]);
 
     return (
       <Transition.Root show={show} as={Fragment}>
@@ -74,7 +74,7 @@ const Modal: React.FC<IModalV2Props> = React.forwardRef(
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-dimmer-default transition-opacity" />
+              <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" />
             </Transition.Child>
             <span
               className="hidden sm:inline-block sm:align-middle sm:h-screen"
@@ -94,14 +94,15 @@ const Modal: React.FC<IModalV2Props> = React.forwardRef(
               <div className={modalStylesWidth + " " + className}>
                 {showCloseBtn && (
                   <div className="sm:block absolute top-1 right-2 pt-2 pr-2 z-50">
-                    <div
+                    <button
                       // @ts-ignore
                       ref={ref}
+                      type="button"
                       onClick={() => onCancel(false)}
-                      className="font-sans icon-close cursor-pointer shadow-md text-lg text-red-500 border border-neutral-50 bg-red-200 rounded-full w-6 h-6 pb-1 flex items-center justify-center hover:bg-red-300 hover:text-red-50"
+                      className="icon-close flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border border-white/70 bg-white/70 pb-1 font-sans text-lg text-rose-500 shadow-md transition-colors hover:bg-rose-400 hover:text-white"
                     >
                       x
-                    </div>
+                    </button>
                   </div>
                 )}
 

@@ -16,39 +16,47 @@ export default function Home() {
   const [showImage, setShowImage] = useState(false);
   const [time, setTime] = useState(0);
   return (
-    <main className="relative z-0 flex h-screen overflow-hidden flex-col items-center gap-6 p-2 md:p-24 bg-[url('/images/background.jpg')] bg-no-repeat bg-cover font-mon text-xl">
-      <Header />
-      <Audio />
-      <div className="md:pt-[calc(100vh*1/6)]">
-        <Loading show={showMail || showImage} time={time} setTime={setTime} />
-      </div>
-      <div className="flex gap-6 text-white">
-        <button
-          className={classNames(
-            "bg-red-400 rounded-lg shadow-lg px-4 py-2 hover:bg-red-500",
-            time === 100 ? "block" : "hidden"
-          )}
-          onClick={() => setShowMail(true)}
-        >
-          Đọc thư ở đây nè
-        </button>
-        <button
-          className={classNames(
-            "bg-red-400 rounded-lg shadow-lg px-4 py-2 hover:bg-red-500",
-            time === 100 ? "block" : "hidden"
-          )}
-          onClick={() => setShowImage(true)}
-        >
-          Xem ảnh ở đây nè
-        </button>
+    <main className="relative z-0 flex min-h-screen overflow-hidden flex-col items-center gap-6 bg-[url('/images/background.jpg')] bg-cover bg-center p-3 pb-8 text-xl md:p-10 md:pb-8">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-rose-900/20 to-black/35" />
+      <div className="pointer-events-none absolute -top-20 right-[-80px] h-56 w-56 rounded-full bg-pink-300/30 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-10 left-[-40px] h-52 w-52 rounded-full bg-purple-300/30 blur-3xl" />
+
+      <div className="relative z-10 flex w-full max-w-5xl flex-col items-center gap-6 rounded-3xl border border-white/30 bg-white/10 p-4 shadow-2xl backdrop-blur-sm md:p-8">
+        <Header />
+        <Audio />
+        <div className="pt-2 md:pt-8">
+          <Loading show={showMail || showImage} time={time} setTime={setTime} />
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-4 text-white">
+          <button
+            className={classNames(
+              "rounded-xl border border-white/30 bg-gradient-to-r from-rose-500 to-pink-500 px-5 py-2.5 text-lg font-semibold shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:from-rose-400 hover:to-pink-400 hover:shadow-pink-400/40",
+              time === 100 ? "block" : "hidden"
+            )}
+            onClick={() => setShowMail(true)}
+          >
+            Đọc thư ở đây nè
+          </button>
+          <button
+            className={classNames(
+              "rounded-xl border border-white/30 bg-gradient-to-r from-fuchsia-500 to-violet-500 px-5 py-2.5 text-lg font-semibold shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:from-fuchsia-400 hover:to-violet-400 hover:shadow-violet-400/40",
+              time === 100 ? "block" : "hidden"
+            )}
+            onClick={() => setShowImage(true)}
+          >
+            Xem ảnh ở đây nè
+          </button>
+        </div>
+
+        <Footer />
+        <Name />
       </div>
 
       <ModalCenter show={showMail} setShow={setShowMail} />
       <ModalImage show={showImage} setShow={setShowImage} />
-      <Footer />
-      <Name />
-      <div className="fixed inset-0 w-screen h-screen opacity-5 blur-sm -z-10">
-        <Image src={"/images/25.jpg"} layout="fill" objectFit="center" alt="" />
+      <div className="fixed inset-0 -z-10 h-screen w-screen opacity-10 blur-sm">
+        <Image src={"/images/25.jpg"} fill className="object-cover" alt="" />
       </div>
     </main>
   );

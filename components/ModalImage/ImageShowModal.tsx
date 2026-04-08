@@ -13,14 +13,14 @@ export const ImageShowModal = ({
 }) => {
   return (
     <Modal show={show} onCancel={() => setShow(false)}>
-      <div className="w-screen h-screen relative">
-        <div className="absolute inset-0 bg-black opacity-90"></div>
-        <div className="w-[90%] h-[90%]">
+      <div className="relative h-screen w-screen">
+        <div className="absolute inset-0 bg-black/90"></div>
+        <div className="relative mx-auto h-[90%] w-[90%]">
           <Image
             src={imageSelected}
             alt="love"
-            layout="fill"
-            objectFit="contain"
+            fill
+            className="object-contain"
           />
         </div>
       </div>
