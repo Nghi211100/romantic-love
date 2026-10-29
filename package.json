@@ -9,8 +9,9 @@
     "lint": "next lint"
   },
   "engines": {
-    "node": "24.x"
+    "node": "20.x"
   },
+  "packageManager": "pnpm@9.15.9",
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@next/font": "^13.5.6",
