@@ -27,7 +27,12 @@ export const ImageShowModal = ({
             src={imageSelected}
             alt="love"
             fill
-            unoptimized={imageSelected.startsWith("/uploads/")}
+            unoptimized={
+              imageSelected.startsWith("http://") ||
+              imageSelected.startsWith("https://") ||
+              imageSelected.startsWith("/uploads/") ||
+              imageSelected.startsWith("/api/album/file/")
+            }
             className="object-contain"
           />
         </div>

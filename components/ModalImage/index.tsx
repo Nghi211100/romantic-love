@@ -1,9 +1,10 @@
 import React, {
   ChangeEvent,
   Dispatch,
+  KeyboardEvent,
+  MouseEvent,
   SetStateAction,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -18,9 +19,19 @@ import {
 type AlbumPhoto = {
   id: string;
   src: string;
-  label: string;
+  caption: string;
   unoptimized?: boolean;
 };
+
+function displaySrc(url: string, name: string) {
+  if (url.includes(".private.blob.vercel-storage.com")) {
+    return `/api/album/file/${name
+      .split("/")
+      .map(encodeURIComponent)
+      .join("/")}`;
+  }
+  return url;
+}
 
 export const ModalImage = ({
   show,
@@ -30,48 +41,33 @@ export const ModalImage = ({
   setShow: Dispatch<SetStateAction<boolean>>;
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const listImage = useMemo<number[]>(() => {
-    return Array.from({ length: 24 }, (_, index) => index + 1);
-  }, []);
-
   const [showFull, setShowFull] = useState(false);
   const [imageSelected, setImageSelected] = useState("");
-  const [uploadedPhotos, setUploadedPhotos] = useState<AlbumPhoto[]>([]);
+  const [photos, setPhotos] = useState<AlbumPhoto[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [isUploading, setIsUploading] = useState(false);
-
-  const builtInPhotos = useMemo<AlbumPhoto[]>(
-    () =>
-      listImage.map((image) => ({
-        id: `built-in-${image}`,
-        src: `/images/${image}.jpg`,
-        label: `Khoảnh khắc #${image}`,
-      })),
-    [listImage]
-  );
-
-  const photos = useMemo(
-    () => [...uploadedPhotos, ...builtInPhotos],
-    [builtInPhotos, uploadedPhotos]
-  );
+  const [editingId, setEditingId] = useState("");
+  const [draftCaption, setDraftCaption] = useState("");
+  const [savingCaption, setSavingCaption] = useState(false);
 
   const loadUploadedPhotos = async () => {
     try {
       const response = await fetch("/api/album");
       if (!response.ok) return;
       const data = (await response.json()) as {
-        images?: { name: string; url: string }[];
+        images?: { name: string; url: string; caption?: string }[];
       };
-      setUploadedPhotos(
-        (data.images || []).map((image, index) => ({
+      const images = data.images || [];
+      setPhotos(
+        images.map((image) => ({
           id: image.name,
-          src: image.url,
-          label: `Ảnh mới #${(data.images || []).length - index}`,
+          src: displaySrc(image.url, image.name),
+          caption: image.caption || "",
           unoptimized: true,
         }))
       );
     } catch {
-      // Keep built-in album if listing uploaded files fails.
+      // Album stays empty if listing blob images fails.
     }
   };
 
@@ -84,6 +80,72 @@ export const ModalImage = ({
   const openImage = (photo: AlbumPhoto) => {
     setImageSelected(photo.src);
     setShowFull(true);
+  };
+
+  const startEditCaption = (
+    event: MouseEvent<HTMLButtonElement>,
+    photo: AlbumPhoto
+  ) => {
+    event.stopPropagation();
+    setEditingId(photo.id);
+    setDraftCaption(photo.caption);
+  };
+
+  const saveCaption = async (photoId: string) => {
+    const nextCaption = draftCaption.replace(/\s+/g, " ").trim();
+    const current = photos.find((photo) => photo.id === photoId);
+    setEditingId("");
+
+    if (!current || nextCaption === current.caption) {
+      return;
+    }
+
+    setPhotos((prev) =>
+      prev.map((photo) =>
+        photo.id === photoId ? { ...photo, caption: nextCaption } : photo
+      )
+    );
+    setSavingCaption(true);
+    try {
+      const response = await fetch("/api/album", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: photoId, caption: nextCaption }),
+      });
+      if (!response.ok) {
+        setPhotos((prev) =>
+          prev.map((photo) =>
+            photo.id === photoId
+              ? { ...photo, caption: current.caption }
+              : photo
+          )
+        );
+        setErrorMessage("Không lưu được chú thích.");
+      }
+    } catch {
+      setPhotos((prev) =>
+        prev.map((photo) =>
+          photo.id === photoId ? { ...photo, caption: current.caption } : photo
+        )
+      );
+      setErrorMessage("Không lưu được chú thích.");
+    } finally {
+      setSavingCaption(false);
+    }
+  };
+
+  const handleCaptionKeyDown = (
+    event: KeyboardEvent<HTMLInputElement>,
+    photoId: string
+  ) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      event.currentTarget.blur();
+    }
+    if (event.key === "Escape") {
+      event.preventDefault();
+      setEditingId("");
+    }
   };
 
   const handleSelectFiles = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -151,7 +213,7 @@ export const ModalImage = ({
               Album của chúng ta
             </p>
             <p className="text-xs text-rose-400 md:text-sm">
-              Chọn ảnh để xem full màn hình
+              Chọn ảnh để xem full màn hình · bấm chú thích để sửa
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -201,14 +263,32 @@ export const ModalImage = ({
                     fill
                     sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
                     loading="lazy"
-                    alt={photo.label}
+                    alt={photo.caption || "Ảnh album"}
                     unoptimized={photo.unoptimized}
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
-                <p className="mt-2 text-center text-xs font-semibold text-rose-400 md:text-sm">
-                  {photo.label}
-                </p>
+                {editingId === photo.id ? (
+                  <input
+                    autoFocus
+                    value={draftCaption}
+                    maxLength={200}
+                    disabled={savingCaption}
+                    onClick={(event) => event.stopPropagation()}
+                    onChange={(event) => setDraftCaption(event.target.value)}
+                    onBlur={() => saveCaption(photo.id)}
+                    onKeyDown={(event) => handleCaptionKeyDown(event, photo.id)}
+                    className="mt-2 w-full rounded-lg border border-rose-200 bg-white px-2 py-1 text-center text-xs font-semibold text-rose-500 outline-none ring-rose-200 focus:ring-2 md:text-sm"
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={(event) => startEditCaption(event, photo)}
+                    className="mt-2 block w-full truncate text-center text-xs font-semibold text-rose-400 hover:text-rose-500 md:text-sm"
+                  >
+                    {photo.caption || "Thêm chú thích"}
+                  </button>
+                )}
               </div>
             ))}
           </div>
