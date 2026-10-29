@@ -56,7 +56,7 @@ export default function Home() {
       <ModalCenter show={showMail} setShow={setShowMail} />
       <ModalImage show={showImage} setShow={setShowImage} />
       <div className="fixed inset-0 -z-10 h-screen w-screen opacity-10 blur-sm">
-        <Image src={"/images/25.jpg"} fill className="object-cover" alt="" />
+        <Image src={"/images/background.jpg"} fill className="object-cover" alt="" />
       </div>
     </main>
   );
