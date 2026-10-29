@@ -27,6 +27,7 @@ export const ImageShowModal = ({
             src={imageSelected}
             alt="love"
             fill
+            unoptimized={imageSelected.startsWith("/uploads/")}
             className="object-contain"
           />
         </div>

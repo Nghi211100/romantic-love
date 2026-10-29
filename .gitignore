@@ -33,3 +33,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# uploaded album images
+/public/uploads/album/*
+!/public/uploads/album/.gitkeep
